@@ -81,18 +81,20 @@
 
 
 
-
-
-
-
-
-
-
   <!--抢购商品，剩余数量减一-->
   <update id="updateKillItemV2">
     UPDATE item_kill
     SET total = total - 1
     WHERE id = #{killId} AND total>0
+  </update>
+
+  <!--用户秒杀成功以后超时没有支付或者取消订单，但是秒杀活动还未结束，剩余商品数量加1-->
+  <update id="updateIsAddKillItemV2">
+    update item_kill set total = total + 1
+     where id = 4 AND (CASE WHEN (now() BETWEEN start_time AND end_time)
+        THEN 1
+       ELSE 0
+       END)  = 1
   </update>
 
 </mapper>
